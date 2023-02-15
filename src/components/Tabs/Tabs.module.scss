@@ -8,24 +8,11 @@
   &__item {
     display: flex;
     align-items: center;
-    padding: 15px;
-    box-sizing: border-box;
-    background-color: #fff;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 20px;
-    color: #4a4a4a;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    text-align: center;
     border: 1px solid #dfe5ec;
     border-right: 1px solid #fff;
-    cursor: pointer;
+    background-color: #fff;
+    color: #4a4a4a;
     transition: color 0.2s linear, background-color 0.2s linear, border 0.2s linear;
-
-    @media screen and (max-width: 400px) {
-      padding: 5px;
-    }
 
     &:first-of-type {
       border-radius: 5px 0 0 5px;
@@ -40,6 +27,34 @@
       background-color: #2196f3;
       border: 1px solid #2196f3;
       color: #fff;
+    }
+
+    &_selected {
+      background-color: #2196f3;
+      border: 1px solid #2196f3;
+      color: #fff;
+      pointer-events: none;
+    }
+  }
+
+  &__button {
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-align: center;
+    color: inherit;
+    border: none;
+    box-shadow: none;
+    cursor: pointer;
+    background-color: transparent;
+
+    @media screen and (max-width: 400px) {
+      padding: 5px;
     }
   }
 }
