@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
+import { getTickets } from '../../store/actions'
 import Filter from '../Filter'
 import Tabs from '../Tabs'
 import CardList from '../CardList'
@@ -8,6 +10,12 @@ import iconLogo from '../../assets/icons/logo.svg'
 import classes from './App.module.scss'
 
 function App() {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getTickets())
+  }, [dispatch])
+
   return (
     <div className={classes.app}>
       <img src={iconLogo} alt="Логотип" />
