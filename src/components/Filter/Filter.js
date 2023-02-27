@@ -14,7 +14,7 @@ import {
 import classes from './Filter.module.scss'
 
 function Filter() {
-  const filters = useSelector((state) => state.transfer.transfer)
+  const filters = useSelector((state) => state.transfer)
   const dispatch = useDispatch()
   const onAllInputChange = (e) => {
     if (e.target.checked) {

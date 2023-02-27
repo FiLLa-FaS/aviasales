@@ -9,7 +9,7 @@ import classes from './CardList.module.scss'
 
 function CardList() {
   const length = useSelector((state) => state.tickets.length)
-  const tickets = useSelector((state) => state.tickets.tickets.tickets)
+  const tickets = useSelector((state) => state.tickets.tickets)
   const dispatch = useDispatch()
 
   const handleMoreButton = () => {
@@ -28,7 +28,7 @@ function CardList() {
   }
 
   const renderTickets = () => {
-    if (!tickets || !length) {
+    if (tickets.length === 0 || !length) {
       return <MoonLoader color="#2196f3" className={classes['card-list__spinner']} />
     }
     const filteredTickets = tickets.length > length ? tickets.slice(0, length) : tickets

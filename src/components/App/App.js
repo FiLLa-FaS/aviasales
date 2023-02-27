@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { getTickets } from '../../store/actions'
+import { getTicketsAction, getSearchIdAction } from '../../store/actions'
 import Filter from '../Filter'
 import Tabs from '../Tabs'
 import CardList from '../CardList'
@@ -11,10 +11,15 @@ import classes from './App.module.scss'
 
 function App() {
   const dispatch = useDispatch()
+  const searchId = useSelector((state) => state.tickets.searchId)
 
   useEffect(() => {
-    dispatch(getTickets())
+    dispatch(getSearchIdAction())
   }, [dispatch])
+
+  useEffect(() => {
+    dispatch(getTicketsAction(searchId))
+  }, [dispatch, searchId])
 
   return (
     <div className={classes.app}>

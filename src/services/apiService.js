@@ -16,6 +16,6 @@ export async function getSearchId() {
 }
 
 export async function getSearchTickets(searchId) {
-  const res = await getResource(API_BASE, `/tickets?searchId=${searchId.searchId}`)
+  const res = await getResource(API_BASE, `/tickets?searchId=${searchId}`)
   return res
 }
