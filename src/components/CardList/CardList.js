@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import MoonLoader from 'react-spinners/MoonLoader'
+import { v4 as uuidv4 } from 'uuid'
 
 import { changeTicketsLengthAction } from '../../store/actions'
 import Card from '../Card'
@@ -10,10 +11,79 @@ import classes from './CardList.module.scss'
 function CardList() {
   const length = useSelector((state) => state.tickets.length)
   const tickets = useSelector((state) => state.tickets.tickets)
+  const sort = useSelector((state) => state.sort.sort)
+  const transfer = useSelector((state) => state.transfer)
+  const hasError = useSelector((state) => state.tickets.hasError)
   const dispatch = useDispatch()
 
   const handleMoreButton = () => {
     dispatch(changeTicketsLengthAction())
+  }
+
+  const sortTickets = (defaultTickets) => {
+    const copiedTickets = [...defaultTickets]
+    let sortedTickets
+    if (sort === 'cheap') {
+      sortedTickets = copiedTickets.sort((a, b) => a.price - b.price)
+    } else if (sort === 'fast') {
+      sortedTickets = copiedTickets.sort((a, b) => {
+        const aDuration = a.segments.reduce((sum, currentDuration) => sum + currentDuration.duration, 0)
+        const bDuration = b.segments.reduce((sum, currentDuration) => sum + currentDuration.duration, 0)
+        return aDuration - bDuration
+      })
+    } else {
+      sortedTickets = copiedTickets.sort((a, b) => {
+        const aDuration = a.segments.reduce((sum, currentDuration) => sum + currentDuration.duration, 0)
+        const aRating = aDuration * 0.5 + a.price * 0.5
+        const bDuration = b.segments.reduce((sum, currentDuration) => sum + currentDuration.duration, 0)
+        const bRating = bDuration * 0.5 + b.price * 0.5
+        return aRating - bRating
+      })
+    }
+    return sortedTickets
+  }
+
+  const filterTickets = (defaultTickets) => {
+    let filteredTickets
+    if (transfer.all) {
+      filteredTickets = defaultTickets
+    } else {
+      const conditions = Object.keys(transfer)
+      const filteredConditions = conditions.filter((condition) => transfer[condition])
+      const conditionsToNumbers = filteredConditions.map((condition) => {
+        let num
+        switch (condition) {
+          case 'oneTransfer':
+            num = 1
+            break
+          case 'twoTransfers':
+            num = 2
+            break
+          case 'threeTransfers':
+            num = 3
+            break
+          default:
+            num = 0
+        }
+        return num
+      })
+      filteredTickets = defaultTickets.filter((ticket) => {
+        let flag = true
+        const stops = []
+        ticket.segments.map((segment) => {
+          stops.push(segment.stops.length)
+          return true
+        })
+        stops.map((stop) => {
+          if (!conditionsToNumbers.includes(stop)) {
+            flag = false
+          }
+          return true
+        })
+        return flag
+      })
+    }
+    return filteredTickets
   }
 
   const renderButton = () => {
@@ -31,12 +101,15 @@ function CardList() {
     if (tickets.length === 0 || !length) {
       return <MoonLoader color="#2196f3" className={classes['card-list__spinner']} />
     }
-    const filteredTickets = tickets.length > length ? tickets.slice(0, length) : tickets
+    const filteredTickets = filterTickets(tickets)
+    const sortedTickets = sortTickets(filteredTickets)
+    const croppedTickets = sortedTickets.length > length ? sortedTickets.slice(0, length) : sortedTickets
     return (
       <>
+        {hasError && <p>Не всем билетам удалось загрузиться, попробуйте позже</p>}
         <ul className={classes.cards}>
-          {filteredTickets.map((ticket) => (
-            <li key={`ticket${ticket.segments[0].date}${ticket.carrier}`} className={classes.cards__item}>
+          {croppedTickets.map((ticket) => (
+            <li key={uuidv4()} className={classes.cards__item}>
               <Card ticket={ticket} />
             </li>
           ))}

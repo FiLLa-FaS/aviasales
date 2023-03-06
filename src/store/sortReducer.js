@@ -1,5 +1,5 @@
 const defaultState = {
-  sort: '',
+  sort: 'cheap',
 }
 
 const sortReducer = (state = defaultState, action = {}) => {

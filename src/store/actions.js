@@ -11,6 +11,8 @@ export const changeOneTransferAction = (payload) => ({ type: 'CHANGE_ONE_TRANSFE
 export const changeTwoTransfersAction = (payload) => ({ type: 'CHANGE_TWO_TRANSFERS', payload })
 export const changeThreeTransfersAction = (payload) => ({ type: 'CHANGE_THREE_TRANSFERS', payload })
 
+export const handleDownloadTicketsErrorAction = () => ({ type: 'HANDLE_DOWNLOAD_TICKETS_ERROR' })
+
 export function getSearchIdAction() {
   return async function getSearchIdCreator(dispatch) {
     try {
@@ -24,7 +26,37 @@ export function getSearchIdAction() {
   }
 }
 
-export function getTicketsAction(searchId) {
+// const getTickets = async (searchId) => {
+//   const ticketsResult = []
+//   console.log(ticketsResult)
+//   try {
+//     const ticketsResponse = await getSearchTickets(searchId)
+//     const { tickets, stop } = await ticketsResponse.json()
+//     ticketsResult.push(...tickets)
+//     console.log(ticketsResult)
+//     if (!stop) {
+//       ticketsResult.push(...(await getTickets(searchId)))
+//       console.log(ticketsResult)
+//     }
+//   } catch (e) {
+//     ticketsResult.push(...(await getTickets(searchId)))
+//     console.log(ticketsResult)
+//   }
+//   return ticketsResult
+// }
+
+// export function getTicketsAction(searchId) {
+//   return async function getTicketsCreator(dispatch) {
+//     if (searchId === '') {
+//       return false
+//     }
+//     const res = await getTickets(searchId)
+//     await dispatch({ type: 'GET_SEARCH_TICKETS', payload: res })
+//     return false
+//   }
+// }
+
+export function getTicketsAction(searchId, maxAttempts) {
   return async function getTicketsCreator(dispatch) {
     try {
       let stop = false
@@ -37,7 +69,11 @@ export function getTicketsAction(searchId) {
         stop = ticketsPack.stop
       }
     } catch (error) {
-      console.log(error)
+      if (maxAttempts === 1) {
+        dispatch(handleDownloadTicketsErrorAction())
+      } else {
+        return getTicketsAction(searchId, maxAttempts - 1)
+      }
     }
     return false
   }

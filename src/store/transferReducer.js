@@ -1,9 +1,9 @@
 const defaultState = {
-  all: false,
-  none: false,
-  oneTransfer: false,
-  twoTransfers: false,
-  threeTransfers: false,
+  all: true,
+  none: true,
+  oneTransfer: true,
+  twoTransfers: true,
+  threeTransfers: true,
 }
 
 const transferReducer = (state = defaultState, action = {}) => {

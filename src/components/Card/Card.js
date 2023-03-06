@@ -1,4 +1,5 @@
 import React from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 import transfersString from '../../helpers/transfersString'
 import { formatDate, formatDuration } from '../../helpers/formatDate'
@@ -18,7 +19,7 @@ function Card({ ticket }) {
       </div>
       {ticket.segments &&
         ticket.segments.map((segment) => (
-          <div className={classes.card__row} key={segment.date}>
+          <div className={classes.card__row} key={uuidv4()}>
             <div className={classes.card__column}>
               <h3 className={classes['card__column-heading']}>
                 {segment.origin} – {segment.destination}

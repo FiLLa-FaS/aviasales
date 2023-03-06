@@ -18,7 +18,7 @@ function App() {
   }, [dispatch])
 
   useEffect(() => {
-    dispatch(getTicketsAction(searchId))
+    dispatch(getTicketsAction(searchId, 3))
   }, [dispatch, searchId])
 
   return (
