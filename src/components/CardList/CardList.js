@@ -14,6 +14,7 @@ function CardList() {
   const sort = useSelector((state) => state.sort.sort)
   const transfer = useSelector((state) => state.transfer)
   const hasError = useSelector((state) => state.tickets.hasError)
+  const isLoading = useSelector((state) => state.tickets.isLoading)
   const dispatch = useDispatch()
 
   const handleMoreButton = () => {
@@ -98,14 +99,12 @@ function CardList() {
   }
 
   const renderTickets = () => {
-    if (tickets.length === 0 || !length) {
-      return <MoonLoader color="#2196f3" className={classes['card-list__spinner']} />
-    }
     const filteredTickets = filterTickets(tickets)
     const sortedTickets = sortTickets(filteredTickets)
     const croppedTickets = sortedTickets.length > length ? sortedTickets.slice(0, length) : sortedTickets
     return (
       <>
+        {isLoading && <MoonLoader color="#2196f3" className={classes['card-list__spinner']} />}
         {hasError && <p>Не всем билетам удалось загрузиться, попробуйте позже</p>}
         <ul className={classes.cards}>
           {croppedTickets.map((ticket) => (

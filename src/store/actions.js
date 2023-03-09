@@ -11,6 +11,7 @@ export const changeOneTransferAction = (payload) => ({ type: 'CHANGE_ONE_TRANSFE
 export const changeTwoTransfersAction = (payload) => ({ type: 'CHANGE_TWO_TRANSFERS', payload })
 export const changeThreeTransfersAction = (payload) => ({ type: 'CHANGE_THREE_TRANSFERS', payload })
 
+export const handleLoadingTicketsAction = (payload) => ({ type: 'HANDLE_LOADING_TICKETS', payload })
 export const handleDownloadTicketsErrorAction = () => ({ type: 'HANDLE_DOWNLOAD_TICKETS_ERROR' })
 
 export function getSearchIdAction() {
@@ -25,6 +26,34 @@ export function getSearchIdAction() {
     return false
   }
 }
+
+export function getTicketsAction(searchId, maxAttempts) {
+  return async function getTicketsCreator(dispatch) {
+    try {
+      let stop = false
+      if (searchId === '') {
+        return false
+      }
+      await dispatch(handleLoadingTicketsAction(true))
+      while (stop === false) {
+        const ticketsPack = await getSearchTickets(searchId)
+        await dispatch({ type: 'GET_SEARCH_TICKETS', payload: ticketsPack.tickets })
+        stop = ticketsPack.stop
+      }
+    } catch (error) {
+      if (maxAttempts === 1) {
+        await dispatch(handleLoadingTicketsAction(false))
+        await dispatch(handleDownloadTicketsErrorAction(false))
+      } else {
+        return getTicketsAction(searchId, maxAttempts - 1)
+      }
+    }
+    await dispatch(handleLoadingTicketsAction(false))
+    return false
+  }
+}
+
+export const changeTicketsLengthAction = () => ({ type: 'CHANGE_TICKETS_LENGTH' })
 
 // const getTickets = async (searchId) => {
 //   const ticketsResult = []
@@ -55,28 +84,3 @@ export function getSearchIdAction() {
 //     return false
 //   }
 // }
-
-export function getTicketsAction(searchId, maxAttempts) {
-  return async function getTicketsCreator(dispatch) {
-    try {
-      let stop = false
-      if (searchId === '') {
-        return false
-      }
-      while (stop === false) {
-        const ticketsPack = await getSearchTickets(searchId)
-        await dispatch({ type: 'GET_SEARCH_TICKETS', payload: ticketsPack.tickets })
-        stop = ticketsPack.stop
-      }
-    } catch (error) {
-      if (maxAttempts === 1) {
-        dispatch(handleDownloadTicketsErrorAction())
-      } else {
-        return getTicketsAction(searchId, maxAttempts - 1)
-      }
-    }
-    return false
-  }
-}
-
-export const changeTicketsLengthAction = () => ({ type: 'CHANGE_TICKETS_LENGTH' })

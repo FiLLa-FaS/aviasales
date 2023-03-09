@@ -3,6 +3,7 @@ const defaultState = {
   length: 5,
   searchId: '',
   hasError: false,
+  isLoading: false,
 }
 
 const ticketsReducer = (state = defaultState, action = {}) => {
@@ -15,6 +16,8 @@ const ticketsReducer = (state = defaultState, action = {}) => {
       return { ...state, length: state.length + 5 }
     case 'HANDLE_DOWNLOAD_TICKETS_ERROR':
       return { ...state, hasError: true }
+    case 'HANDLE_LOADING_TICKETS':
+      return { ...state, isLoading: action.payload }
     default:
       return state
   }
