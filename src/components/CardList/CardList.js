@@ -102,6 +102,10 @@ function CardList() {
     const filteredTickets = filterTickets(tickets)
     const sortedTickets = sortTickets(filteredTickets)
     const croppedTickets = sortedTickets.length > length ? sortedTickets.slice(0, length) : sortedTickets
+    if (croppedTickets.length === 0) {
+      return <p>Билетов не найдено</p>
+    }
+
     return (
       <>
         {isLoading && <MoonLoader color="#2196f3" className={classes['card-list__spinner']} />}
