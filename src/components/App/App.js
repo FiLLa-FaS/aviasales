@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { getTicketsAction, getSearchIdAction } from '../../store/actions'
+import { ticketsSearchId } from '../../store/selectors'
 import Filter from '../Filter'
 import Tabs from '../Tabs'
 import CardList from '../CardList'
@@ -11,7 +12,7 @@ import classes from './App.module.scss'
 
 function App() {
   const dispatch = useDispatch()
-  const searchId = useSelector((state) => state.tickets.searchId)
+  const searchId = useSelector(ticketsSearchId)
 
   useEffect(() => {
     dispatch(getSearchIdAction())

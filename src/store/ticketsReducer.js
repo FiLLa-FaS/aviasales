@@ -15,7 +15,7 @@ const ticketsReducer = (state = defaultState, action = {}) => {
     case 'CHANGE_TICKETS_LENGTH':
       return { ...state, length: state.length + 5 }
     case 'HANDLE_DOWNLOAD_TICKETS_ERROR':
-      return { ...state, hasError: true }
+      return { ...state, hasError: action.payload }
     case 'HANDLE_LOADING_TICKETS':
       return { ...state, isLoading: action.payload }
     default:

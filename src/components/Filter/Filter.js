@@ -10,11 +10,12 @@ import {
   disableAllTransfersAction,
   setAllTransfersAction,
 } from '../../store/actions'
+import { transfers } from '../../store/selectors'
 
 import classes from './Filter.module.scss'
 
 function Filter() {
-  const filters = useSelector((state) => state.transfer)
+  const filters = useSelector(transfers)
   const dispatch = useDispatch()
   const onAllInputChange = (e) => {
     if (e.target.checked) {

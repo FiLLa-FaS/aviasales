@@ -4,17 +4,25 @@ import MoonLoader from 'react-spinners/MoonLoader'
 import { v4 as uuidv4 } from 'uuid'
 
 import { changeTicketsLengthAction } from '../../store/actions'
+import {
+  sortType,
+  ticketsArr,
+  ticketsHasError,
+  ticketsIsLoading,
+  ticketsLength,
+  transfers,
+} from '../../store/selectors'
 import Card from '../Card'
 
 import classes from './CardList.module.scss'
 
 function CardList() {
-  const length = useSelector((state) => state.tickets.length)
-  const tickets = useSelector((state) => state.tickets.tickets)
-  const sort = useSelector((state) => state.sort.sort)
-  const transfer = useSelector((state) => state.transfer)
-  const hasError = useSelector((state) => state.tickets.hasError)
-  const isLoading = useSelector((state) => state.tickets.isLoading)
+  const length = useSelector(ticketsLength)
+  const tickets = useSelector(ticketsArr)
+  const sort = useSelector(sortType)
+  const transfer = useSelector(transfers)
+  const hasError = useSelector(ticketsHasError)
+  const isLoading = useSelector(ticketsIsLoading)
   const dispatch = useDispatch()
 
   const handleMoreButton = () => {

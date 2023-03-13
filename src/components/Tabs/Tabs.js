@@ -3,11 +3,12 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { changeSortAction } from '../../store/actions'
+import { sortType } from '../../store/selectors'
 
 import classes from './Tabs.module.scss'
 
 function Tabs() {
-  const tab = useSelector((state) => state.sort.sort)
+  const tab = useSelector(sortType)
   const dispatch = useDispatch()
   const changeSort = (name) => {
     dispatch(changeSortAction(name))
