@@ -116,7 +116,7 @@ function CardList() {
 
     return (
       <>
-        {isLoading && !hasError && <BarLoader color="#2196f3" className={classes['card-list__spinner']} />}
+        {isLoading && !hasError && <BarLoader width="100%" color="#2196f3" className={classes['card-list__spinner']} />}
         {hasError && <p>Не всем билетам удалось загрузиться, попробуйте позже</p>}
         <ul className={classes.cards}>
           {croppedTickets.map((ticket) => (
