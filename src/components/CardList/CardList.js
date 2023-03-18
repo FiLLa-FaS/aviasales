@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import MoonLoader from 'react-spinners/MoonLoader'
+import BarLoader from 'react-spinners/BarLoader'
 import { v4 as uuidv4 } from 'uuid'
 
 import { changeTicketsLengthAction } from '../../store/actions'
@@ -116,7 +116,7 @@ function CardList() {
 
     return (
       <>
-        {isLoading && <MoonLoader color="#2196f3" className={classes['card-list__spinner']} />}
+        {isLoading && !hasError && <BarLoader color="#2196f3" className={classes['card-list__spinner']} />}
         {hasError && <p>Не всем билетам удалось загрузиться, попробуйте позже</p>}
         <ul className={classes.cards}>
           {croppedTickets.map((ticket) => (

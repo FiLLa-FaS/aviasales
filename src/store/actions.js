@@ -21,13 +21,14 @@ export function getSearchIdAction() {
       const res = await dispatch({ type: 'GET_SEARCH_ID', payload: id.searchId })
       return res
     } catch (error) {
-      console.log(error)
+      throw new Error(error)
     }
-    return false
   }
 }
 
-export function getTicketsAction(searchId, maxAttempts) {
+let counter = 0
+
+export function getTicketsAction(searchId) {
   return async function getTicketsCreator(dispatch) {
     try {
       let stop = false
@@ -35,10 +36,11 @@ export function getTicketsAction(searchId, maxAttempts) {
         return false
       }
       if (!stop) {
-        await dispatch(handleLoadingTicketsAction(true))
+        dispatch(handleLoadingTicketsAction(true))
       }
       while (!stop) {
         const ticketsPack = await getSearchTickets(searchId)
+        counter = 0
         dispatch({ type: 'GET_SEARCH_TICKETS', payload: ticketsPack.tickets })
         stop = ticketsPack.stop
       }
@@ -47,12 +49,13 @@ export function getTicketsAction(searchId, maxAttempts) {
         return false
       }
     } catch (error) {
-      if (maxAttempts === 0) {
+      if (counter === 3) {
         dispatch(handleLoadingTicketsAction(false))
         dispatch(handleDownloadTicketsErrorAction(true))
-      } else {
-        await dispatch(getTicketsAction(searchId, maxAttempts - 1))
+        return false
       }
+      counter += 1
+      await dispatch(getTicketsAction(searchId))
     }
     return false
   }
